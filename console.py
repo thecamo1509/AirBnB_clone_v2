@@ -45,8 +45,8 @@ class HBNBCommand(cmd.Cmd):
             obj = eval("{}()".format(my_list[0]))
             for list in my_list[1:]:
                 list = list.split("=")
-                list[1] = list[1].strip('"')
                 list[1] = list[1].replace('_', ' ')
+                list[1] = list[1].replace('"', '\\')
                 setatrr(obj, list[0], list[1])
             obj.save()
             print("{}".format(obj.id))
