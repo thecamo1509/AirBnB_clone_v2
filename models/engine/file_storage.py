@@ -66,8 +66,7 @@ class FileStorage:
         """ Remove objects """
         if not obj:
             return
-        else:
-            key = "{}.{}".format(type(obj).__name__, obj.id)
-            if key in self.__objects:
-                del self.__objects[key]
-                self.save()
+        key = "{}.{}".format(type(obj).__name__, obj.id)
+        if key in self.__objects:
+            del self.__objects[key]
+            self.save()
