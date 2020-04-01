@@ -68,5 +68,6 @@ class FileStorage:
             return
         else:
             key = "{}.{}".format(type(obj).__name__, obj.id)
-            del self.__objects[key]
-            self.save()
+            if key in self.__objects:
+                del self.__objects[key]
+                self.save()
