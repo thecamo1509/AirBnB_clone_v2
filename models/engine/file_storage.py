@@ -25,7 +25,7 @@ class FileStorage:
         Return:
             returns a dictionary of __object
         """
-        if cls is not None:
+        if cls is None:
             return self.__objects          
         obj_dict = {}
         for key, value in self.__objects.items():
