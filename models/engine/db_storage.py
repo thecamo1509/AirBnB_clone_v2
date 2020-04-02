@@ -20,6 +20,9 @@ class DBStorage:
     __session = None
 
     def __init__(self):
+        """
+        Creating the documentation
+        """
         self.__engine = create_engine('mysql+mysqldb://{}:{}@{}/{}'.format(
             getenv('HBNB_MYSQL_USER'), getenv('HBNB_MYSQL_PWD'),
             getenv('HBNB_MYSQL_HOST'), getenv('HBNB_MYSQL_DB')),
@@ -27,7 +30,7 @@ class DBStorage:
         if getenv('HBNB_ENV') == 'test':
             Base.metadata.drop_all(bind=self.__engine)
 
-    def all(self):
+    def all(self, cls=None):
         """
         all
         Returns a dictionary representation of the object

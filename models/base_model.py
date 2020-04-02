@@ -82,4 +82,3 @@ class BaseModel:
         delete method
         """
         models.storage.delete(self)
-        models.storage.save()

@@ -19,6 +19,9 @@ class State(BaseModel, Base):
     else:
         @property
         def cities(self):
+            """
+            cities getter
+            """
             city = storage.all()
             mylist = []
             for i in city:
