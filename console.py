@@ -42,22 +42,49 @@ class HBNBCommand(cmd.Cmd):
             if not line:
                 raise SyntaxError()
             my_list = line.split(" ")
-            my_dict = {}
-            dict_class = eval("{}.__dict__".format(my_list[0]))
-            for i in range(1, len(my_list)):
-                temp = my_list[i].split("=")
-                value = temp[1].replace("_", " ")
-                my_dict[temp[0]] = value
             obj = eval("{}()".format(my_list[0]))
-            for k, v in my_dict.items():
-                if getattr(obj, k, 'nonexistent') != 'nonexistent':
-                    setattr(obj, k, eval(v))
+            for list_param in my_list[1:]:
+                list = list_param.split("=")
+                list[1] = list[1].strip('"')
+                list[1] = list[1].replace('_', ' ')
+                setattr(obj, list[0], list[1])
             obj.save()
             print("{}".format(obj.id))
         except SyntaxError:
             print("** class name missing **")
         except NameError:
             print("** class doesn't exist **")
+
+    def do_show(self, line):
+        """Prints the string representation of an instance
+        Exceptions:
+            SyntaxError: when there is no args given
+            NameError: when there is no object taht has the name
+            IndexError: when there is no id given
+            KeyError: when there is no valid id given
+        """
+        try:
+            if not line:
+                raise SyntaxError()
+            my_list = line.split(" ")
+            if my_list[0] not in self.all_classes:
+                raise NameError()
+            if len(my_list) < 2:
+                raise IndexError()
+            objects = storage.all()
+            key = my_list[0] + '.' + my_list[1]
+            if key in objects:
+                print(objects[key])
+            else:
+                raise KeyError()
+        except SyntaxError:
+            print("** class name missing **")
+        except NameError:
+            print("** class doesn't exist **")
+        except IndexError:
+            print("** instance id missing **")
+        except KeyError:
+            print("** no instance found **")
 
     def do_destroy(self, line):
         """Deletes an instance based on the class name and id
