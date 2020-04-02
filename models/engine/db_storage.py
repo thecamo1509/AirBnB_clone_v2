@@ -33,27 +33,28 @@ class DBStorage:
     def all(self, cls=None):
         """
         all
-        Returns a dictionary representation of the object
         """
-        result = None
-        mydict = {}
         mylist = []
-        if cls is None:
-            classes = [User, State, City, Amenity, Place, Review]
-            for i in classes:
-                try:
-                    result = self.__session.query(i).all()
-                    if result is not None:
-                        for j in result:
-                            mylist.append(j)
-                except InvalidRequestError:
-                    pass
+        objects = {}
+        myclasses = {'cities': 'City', 'states': 'State', 'users': 'User',
+                     'amenities': 'Amenity', 'places': 'Place',
+                     'reviews': 'Review'}
+        if cls:
+            mylist = self.__session.query(eval(cls)).all()
         else:
-            result = self.__session.query(eval(cls)).all()
-            if result is not None:
-                for i in result:
-                    mylist.append(i)
-        return (mylist)
+            tables = self.__engine.table_names()
+            for table in tables:
+                mylist.append(self.__session.query(
+                    eval(myclasses[table])).all())
+        for obj in mylist:
+            if type(obj) == list:
+                for o in obj:
+                    key = "{}.{}".format(o.__class__.__name__, o.id)
+                    objects[key] = o
+            else:
+                key = "{}.{}".format(obj.__class__.__name__, obj.id)
+                objects[key] = obj
+        return objects
 
     def new(self, obj):
         """
