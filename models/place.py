@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 """This is the place class"""
 from models.base_model import BaseModel, Base
-from sqlalchemy import Column, Integer, String, ForeignKey, Float
+from sqlalchemy import Column, Integer, String, ForeignKey, Float, Table
 from sqlalchemy.orm import relationship
 from os import getenv
 
@@ -32,9 +32,18 @@ class Place(BaseModel, Base):
     price_by_night = Column(Integer, default=0, nullable=False)
     latitude = Column(Float, nullable=True)
     longitude = Column(Float, nullable=True)
+    meta = Base.metadata
+    place_amenity = Table('place_amenity', meta, Column('place_id', String(60),
+                          ForeignKey('places.id'), primary_key=True,
+                          nullable=False),
+                          Column('amenity_id', String(60),
+                          ForeignKey('amenities.id'),
+                          primary_key=True, nullable=False))
 
     if getenv("HBNB_TYPE_STORAGE") == 'db':
         reviews = relationship('Review', backref='place')
+        amenities = relationship('Amenity', secondary=Place.place_amenity,
+                                 viewonly=False)
     else:
         @property
         def reviews(self):
@@ -48,3 +57,24 @@ class Place(BaseModel, Base):
                 if i.place_id == self.id and classname == 'Review':
                     reviews_list.append(i)
             return reviews_list
+
+        @property
+        def amenities(self):
+            """
+            amenities getter"
+            """
+            instances = storage.all()
+            amenitieslist = []
+            for i in instances:
+                classname = i.__class__.__name__
+                if i.place_id == self.id and classname == 'Amenity':
+                    amenitieslist.append(i)
+            return (amenitieslist)
+
+        @amenities.setter
+        def amenities(self, obj):
+            """
+            amenities setter
+            """
+            if obj.__class__.__name__ == 'Amenity':
+                amenity_ids.append(obj.id)
