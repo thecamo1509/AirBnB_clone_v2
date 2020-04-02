@@ -32,6 +32,7 @@ class Place(BaseModel, Base):
     price_by_night = Column(Integer, default=0, nullable=False)
     latitude = Column(Float, nullable=True)
     longitude = Column(Float, nullable=True)
+    amenity_ids = []
     meta = Base.metadata
     place_amenity = Table('place_amenity', meta, Column('place_id', String(60),
                           ForeignKey('places.id'), primary_key=True,
@@ -42,8 +43,9 @@ class Place(BaseModel, Base):
 
     if getenv("HBNB_TYPE_STORAGE") == 'db':
         reviews = relationship('Review', backref='place')
-        amenities = relationship('Amenity', secondary=Place.place_amenity,
-                                 viewonly=False)
+        amenities = relationship('Amenity', secondary=place_amenity,
+                                 viewonly=False,
+                                 backref='place_amenities')
     else:
         @property
         def reviews(self):
