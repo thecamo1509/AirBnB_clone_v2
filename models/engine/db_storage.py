@@ -63,6 +63,12 @@ class DBStorage:
         self.__session.add(obj)
         self.save()
 
+    def save(self):
+        """
+        save
+        """
+        self.__session.commit()
+
     def delete(self, obj=None):
         """
         delete
