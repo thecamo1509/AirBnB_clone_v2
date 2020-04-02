@@ -15,8 +15,8 @@ class BaseModel:
     for other classes
     """
     id = Column(String(60), nullable=False, primary_key=True)
-    created_at = Column(Datetime, default=datetime.utcnow(), nullable=False)
-    updated_at = Column(Datetime, default=datetime.utcnow(), nullable=False)
+    created_at = Column(DateTime, default=datetime.utcnow(), nullable=False)
+    updated_at = Column(DateTime, default=datetime.utcnow(), nullable=False)
 
     def __init__(self, *args, **kwargs):
         """Instantiation of base model class
@@ -34,6 +34,12 @@ class BaseModel:
                     value = datetime.strptime(value, "%Y-%m-%dT%H:%M:%S.%f")
                 if key != "__class__":
                     setattr(self, key, value)
+                if "created_at" not in kwargs:
+                    self.created_at = datetime.now()
+                if "updated_at" not in kwargs:
+                    self.updated_at = datetime.now()
+                if "id" not in kwargs:
+                    self.id = str(uuid.uuid4())
         else:
             self.id = str(uuid.uuid4())
             self.created_at = self.updated_at = datetime.now()
@@ -72,5 +78,8 @@ class BaseModel:
         return my_dict
 
     def delete(self):
+        """
+        delete method
+        """
         models.storage.delete(self)
         models.storage.save()
