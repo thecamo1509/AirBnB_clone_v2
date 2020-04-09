@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+#This will configure the server and web static
+sudo apt -y update
+sudo apt -y install nginx
+mkdir /data/
+mkdir /data/web_static/
+mkdir /data/web_static/releases/
+mkdir /data/web_static/shared/
+mkdir /data/web_static/releases/test/
+echo "<html>\n<head>\n</head>\n<body>\nHolberton School\n</body>\n</html>" > /data/web_static/releases/test/index.html
+ln -sf /data/web_static/releases/test/ /data/web_static/current 
+chown ubuntu:ubuntu /data/
+sed -i '42i location /hbnb_static {\nalias /data/web_static/current/;\n}\n' /etc/nginx/sites-enabled/default
+service nginx restart
