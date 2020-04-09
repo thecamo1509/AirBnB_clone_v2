@@ -32,7 +32,6 @@ class FileStorage:
             if value.__class__ == cls:
                 obj_dict[key] = value
         return obj_dict
-        
 
     def new(self, obj):
         """sets __object to given obj
