@@ -8,18 +8,8 @@ env.hosts = ["3.84.104.13", "35.237.21.147"]
 
 def do_clean(number=0):
     """Deletes the useless versions"""
-    try:
-        stat("versions")
-    except Exception:
-        pass
-    if number == "0" or number == "1":
-        number = 1
     number = int(number)
-    loc = local("ls -t versions/", capture=True)
-    loc = str(loc).split("\n")
-    n = len(loc)
-    for i in range(number, n):
-        local("rm versions/{}".format(loc[i]))
-        name = loc[i].split(".")
-        name = name[0]
-        run("rm -rf /data/web_static/releases/{}/".format(name))
+    local("ls -d -1tr versions/* | tail -n +{} | \
+          xargs -d '\n' rm -f --".format(number < 1 ? 2: number + 1))
+    run("ls -d -1tr /data/web_static/releases/* | tail -n +{} | \
+          xargs -d '\n' rm -rf --".format(number < 1 ? 2: number + 1))
