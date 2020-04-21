@@ -1,0 +1,50 @@
+#!/usr/bin/python3
+from flask import Flask
+app = Flask(__name__)
+
+
+@app.route('/', strict_slashes=False)
+def hello():
+    """This is the hello function"""
+    return 'Hello HBNB!'
+
+
+@app.route('/hbnb', strict_slashes=False)
+def hello_world():
+    """This is the HBNB function"""
+    return 'HBNB'
+
+
+@app.route('/c/<text>', strict_slashes=False)
+def hello_c(text):
+    """ string"""
+    return 'C {}'.format(text).replace('_', ' ')
+
+
+@app.route('/python/', defaults={'text': 'is cool'}, strict_slashes=False)
+@app.route('/python/<text>', strict_slashes=False)
+def hello_python(text='is cool'):
+    """ string """
+    return 'Python {}'.format(text).replace('_', ' ')
+
+
+@app.route('/number/<int:n>', strict_slashes=False)
+def hello_number(n):
+    """ Integer """
+    return '{} is a number'.format(n).replace('_', ' ')
+
+
+@app.route('/number_template/<int:n>', strict_slashes=False)
+def hello_template(n):
+    """ string to be returned """
+    return render_template('5-number.html', n=n)
+
+
+@app.route('/number_odd_or_even/<int:n>', strict_slashes=False)
+def hello_odd_or_even(n):
+    """ string to be returned """
+    return render_template('6-number_odd_or_even.html', n=n)
+
+
+if __name__ == '__main__':
+    app.run('0.0.0.0', port=5000)
