@@ -5,6 +5,7 @@ from sqlalchemy import Column, String
 from sqlalchemy.orm import relationship
 from models.city import City
 from os import getenv
+import models
 
 
 class State(BaseModel, Base):
@@ -22,9 +23,9 @@ class State(BaseModel, Base):
             """
             cities getter
             """
-            city = storage.all()
+            city = models.storage.all('City')
             mylist = []
-            for i in city:
-                if i.states_id == self.id:
+            for i in city.values():
+                if i.state_id == self.id:
                     mylist.append(i)
             return mylist
