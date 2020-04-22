@@ -28,5 +28,4 @@ class State(BaseModel, Base):
             for i in city.values():
                 if i.state_id == self.id:
                     mylist.append(i)
-            print(mylist)
             return mylist
