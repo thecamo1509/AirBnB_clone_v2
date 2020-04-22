@@ -23,9 +23,10 @@ class State(BaseModel, Base):
             """
             cities getter
             """
-            city = models.storage.all('City')
+            city = models.storage.all(City)
             mylist = []
             for i in city.values():
                 if i.state_id == self.id:
                     mylist.append(i)
+            print(mylist)
             return mylist
