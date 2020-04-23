@@ -9,6 +9,7 @@ app = Flask(__name__)
 
 @app.route('/hbnb_filters', strict_slashes=False)
 def getinfo(id=None):
+    """Getting info from the database"""
     states = storage.all(State).values()
     cities = storage.all(City).values()
     amenities = storage.all(Amenity).values()
@@ -18,6 +19,7 @@ def getinfo(id=None):
 
 @app.teardown_appcontext
 def teardown_db(self):
+    """Close Database's Session"""
     storage.close()
 
 
